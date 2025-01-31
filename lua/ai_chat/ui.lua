@@ -55,8 +55,21 @@ function M.create_chat_window()
 		}
 	)
 
+	vim.api.nvim_buf_set_keymap(state.chat_buf, "n", "q", '<cmd>lua require("ai_chat.ui").close_chat()<CR>', {
+		noremap = true,
+		silent = true,
+	})
+
 	vim.api.nvim_command("startinsert")
 	return state.chat_buf, state.chat_win
+end
+
+function M.close_chat()
+	if state.chat_win and vim.api.nvim_win_is_valid(state.chat_win) then
+		vim.api.nvim_win_close(state.chat_win, true)
+		state.chat_win = nil
+		state.chat_buf = nil
+	end
 end
 
 return M
