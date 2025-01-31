@@ -12,26 +12,49 @@ function M.start_chat(model_name)
 end
 
 function M.send_message()
-	local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+	local buf = vim.api.nvim_get_current_buf()
+	local all_lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
 
-	local processed_lines = {}
-	for _, line in ipairs(lines) do
-		local sub_lines = vim.split(line, "\n")
-		vim.list_extend(processed_lines, sub_lines)
+	local last_user_input = nil
+	for i = #all_lines, 1, -1 do
+		if all_lines[i]:find("## Question") then
+			last_user_input = i + 1
+			break
+		end
 	end
 
-	local prompt = table.concat(processed_lines, "\n")
+	local new_lines = {}
 
-	-- Clean up input area
-	local input_start = #processed_lines - #lines + 1
-	local input_end = #processed_lines
-	vim.api.nvim_buf_set_lines(0, input_start, input_end, false, {})
+	if last_user_input then
+		new_lines = vim.list_slice(all_lines, last_user_input, #all_lines)
+	else
+		new_lines = all_lines
+	end
 
-	-- Add question to chat display
-	vim.api.nvim_buf_set_lines(0, -1, -1, false, { "## Question", unpack(processed_lines), "", "## Response", "..." })
+	-- Clean just the last user input
+	vim.api.nvim_buf_set_lines(buf, last_user_input or 0, -1, false, {})
 
-	-- Keep final scroll
-	vim.api.nvim_command("normal! G")
+	-- Build history
+	local full_history = {}
+	if last_user_input then
+		full_history = vim.list_slice(all_lines, 0, last_user_input - 1)
+	end
+
+	-- Add new question and answer
+	local time = os.date("%H:%M")
+	table.insert(full_history, "## Question (" .. time .. ")")
+	vim.list_extend(full_history, new_lines)
+	table.insert(full_history, "")
+	table.insert(full_history, "## Response")
+	table.insert(full_history, "[RESPUESTA DEL MODELO]")
+	table.insert(full_history, "")
+
+	-- Update all the buffer preserving the history
+	vim.api.nvim_buf_set_lines(buf, 0, -1, false, full_history)
+
+	-- Set cursor to the end
+	vim.api.nvim_win_set_cursor(0, { vim.api.nvim_buf_line_count(buf), 0 })
+	vim.cmd("startinsert")
 end
 
 return M
