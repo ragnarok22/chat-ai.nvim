@@ -1,14 +1,29 @@
 local M = {}
 
+-- @class AIChat.Config
+-- @field models table<string, AIChat.Model> List of available models
+-- @field window table<string, AIChat.Window> Window configuration
+
+-- @class AIChat.Model
+-- @field api_key string API key for the model
+-- @field endpoint string API endpoint for the model
+-- @field model string Model name
+
+-- @class AIChat.Window
+-- @field width number Width of the window
+-- @field position string Position of the window
+
 M.defaul_config = {
 	models = {
 		deepseek = {
 			api_key = nil,
-			endpoint = "https://api.deepseek.com/v1/chat",
+			endpoint = "https://api.deepseek.com/chat/completions",
+			model = "deepseek-chat",
 		},
 		chatgpt = {
 			api_key = nil,
-			endpoint = "https://api.openai.com/v1/chat",
+			endpoint = "https://api.openai.com/v1/chat/completions",
+			model = "gpt-4",
 		},
 	},
 	window = {

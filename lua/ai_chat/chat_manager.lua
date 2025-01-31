@@ -13,22 +13,25 @@ end
 
 function M.send_message()
 	local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-	local prompt = table.concat(lines, "\n")
 
-	-- Add user question to history
-	table.insert(chat_history, {
-		role = "user",
-		content = prompt,
-	})
+	local processed_lines = {}
+	for _, line in ipairs(lines) do
+		local sub_lines = vim.split(line, "\n")
+		vim.list_extend(processed_lines, sub_lines)
+	end
 
-	-- Clear input area
-	vim.api.nvim_buf_set_lines(0, -2, -1, false, {})
+	local prompt = table.concat(processed_lines, "\n")
+
+	-- Clean up input area
+	local input_start = #processed_lines - #lines + 1
+	local input_end = #processed_lines
+	vim.api.nvim_buf_set_lines(0, input_start, input_end, false, {})
 
 	-- Add question to chat display
-	vim.api.nvim_buf_set_lines(0, -1, -1, false, { "## Question", prompt, "" })
+	vim.api.nvim_buf_set_lines(0, -1, -1, false, { "## Question", unpack(processed_lines), "", "## Response", "..." })
 
-	-- TODO: For now, just echo the question - implement model response later
-	vim.api.nvim_buf_set_lines(0, -1, -1, false, { "## Response", "Response placeholder", "" })
+	-- Keep final scroll
+	vim.api.nvim_command("normal! G")
 end
 
 return M
