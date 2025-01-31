@@ -39,14 +39,27 @@ function M.send_message()
 		full_history = vim.list_slice(all_lines, 0, last_user_input - 1)
 	end
 
+	local response = current_model.query_sync(new_lines)
+	local content = response.choices[1].message.content
+
+	vim.schedule(function()
+		local response_lines = vim.split(content, "\n")
+		vim.api.nvim_buf_set_lines(buf, -2, -1, false, {
+			"## Response (" .. os.date("%H:%M") .. ")",
+			"",
+			table.concat(response_lines, "\n"),
+			"",
+			"## Question",
+			"",
+		})
+		-- table.insert(full_history, "")
+		-- table.insert(full_history, "## Question")
+		-- table.insert(full_history, "")
+	end)
+
 	-- Add new question and answer
 	local time = os.date("%H:%M")
 	vim.list_extend(full_history, new_lines)
-	table.insert(full_history, "")
-	table.insert(full_history, "## Response (" .. time .. ")")
-	table.insert(full_history, "[RESPUESTA DEL MODELO]")
-	table.insert(full_history, "")
-	table.insert(full_history, "## Question")
 	table.insert(full_history, "")
 
 	-- Update all the buffer preserving the history

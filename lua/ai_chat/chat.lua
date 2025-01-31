@@ -1,9 +1,5 @@
 local M = {}
 
-local function send_request(prompt)
-	print(prompt)
-end
-
 function M.start()
 	-- Create a buffer for chat
 	local buf = vim.api.nvim_create_buf(false, true)
