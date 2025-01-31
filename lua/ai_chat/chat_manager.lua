@@ -52,9 +52,9 @@ function M.send_message()
 			"## Question",
 			"",
 		})
-		-- table.insert(full_history, "")
-		-- table.insert(full_history, "## Question")
-		-- table.insert(full_history, "")
+
+		-- Set cursor to the end
+		vim.api.nvim_win_set_cursor(0, { vim.api.nvim_buf_line_count(buf), 0 })
 	end)
 
 	-- Add new question and answer
