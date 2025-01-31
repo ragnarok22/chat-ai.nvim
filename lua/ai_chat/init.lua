@@ -1,6 +1,9 @@
 local M = {}
 local chat_manager = require("ai_chat.chat_manager")
 
+M.chat_manager = chat_manager
+M.models = require("ai_chat.models")
+
 vim.notify("Plugin cargado corectamente", vim.log.levels.INFO)
 
 function M.setup(user_config)

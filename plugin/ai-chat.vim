@@ -1,1 +1,1 @@
-lua require('chatgpt').setup()
+lua require('ai_chat').setup()
