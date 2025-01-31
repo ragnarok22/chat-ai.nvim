@@ -3,7 +3,6 @@ local ui = require("ai_chat.ui")
 local models = require("ai_chat.models")
 
 local current_model = nil
-local chat_history = {}
 local DEFAULT_MODEL = "chatgpt"
 
 function M.start_chat(model_name)
@@ -42,11 +41,12 @@ function M.send_message()
 
 	-- Add new question and answer
 	local time = os.date("%H:%M")
-	table.insert(full_history, "## Question (" .. time .. ")")
 	vim.list_extend(full_history, new_lines)
 	table.insert(full_history, "")
-	table.insert(full_history, "## Response")
+	table.insert(full_history, "## Response (" .. time .. ")")
 	table.insert(full_history, "[RESPUESTA DEL MODELO]")
+	table.insert(full_history, "")
+	table.insert(full_history, "## Question")
 	table.insert(full_history, "")
 
 	-- Update all the buffer preserving the history
