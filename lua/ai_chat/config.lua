@@ -1,17 +1,17 @@
 local M = {}
 
 -- @class AIChat.Config
--- @field models table<string, AIChat.Model> List of available models
--- @field window table<string, AIChat.Window> Window configuration
+-- @field models table<string, AIChat.Model>: List of available models
+-- @field window table<string, AIChat.Window>: Window configuration
 
 -- @class AIChat.Model
--- @field api_key string API key for the model
--- @field endpoint string API endpoint for the model
--- @field model string Model name
+-- @field api_key string: API key for the model
+-- @field endpoint string: API endpoint for the model
+-- @field model "deepseek" or "chatgpt": Model name
 
 -- @class AIChat.Window
--- @field width number Width of the window
--- @field position string Position of the window
+-- @field width number: Width of the window
+-- @field position string: Position of the window
 
 M.defaul_config = {
 	models = {

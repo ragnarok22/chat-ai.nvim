@@ -1,3 +1,6 @@
+-- @class AIChat.Models.Model
+-- @method query_sync
+-- @method query_async
 local M = {}
 local config = require("ai_chat.config")
 

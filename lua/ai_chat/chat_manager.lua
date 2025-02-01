@@ -40,6 +40,17 @@ function M.send_message()
 	end
 
 	local response = current_model.query_sync(new_lines)
+	if not response then
+		vim.api.nvim_buf_set_lines(buf, -2, -1, false, {
+			"## Error",
+			"",
+			"Failed to get response from model",
+			"",
+			"## Question",
+			"",
+		})
+	end
+
 	local content = response.choices[1].message.content
 
 	vim.schedule(function()

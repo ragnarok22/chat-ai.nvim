@@ -3,6 +3,8 @@ local M = {}
 M.deepseek = require("ai_chat.models.deepseek")
 M.chatgpt = require("ai_chat.models.chatgpt")
 
+-- @param model_name: "deepseek" or "chatgpt"
+-- @return AIChat.Model
 function M.get_model(model_name)
 	if model_name == "deepseek" then
 		return M.deepseek
