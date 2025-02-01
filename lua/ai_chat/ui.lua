@@ -37,7 +37,8 @@ function M.create_chat_window()
 	-- Create a new buffer if it doesn't exist
 	if not is_valid(state.chat_buf) then
 		state.chat_buf = vim.api.nvim_create_buf(false, true)
-		vim.api.nvim_buf_set_lines(state.chat_buf, 0, -1, false, { "## Question:", "" })
+
+		vim.api.nvim_buf_set_lines(state.chat_buf, -2, -1, false, { "## Question:", "" })
 
 		vim.api.nvim_set_option_value("filetype", "markdown", { buf = state.chat_buf })
 		vim.api.nvim_set_option_value("buftype", "nofile", { buf = state.chat_buf })
@@ -66,6 +67,9 @@ function M.create_chat_window()
 	set_keymaps()
 
 	vim.api.nvim_command("startinsert")
+
+	-- Set cursor to the end
+	vim.api.nvim_win_set_cursor(state.chat_win, { vim.api.nvim_buf_line_count(state.chat_buf), 0 })
 	return state.chat_buf, state.chat_win
 end
 
