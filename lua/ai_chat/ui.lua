@@ -10,6 +10,24 @@ local function is_valid(bufnr)
 	return bufnr and vim.api.nvim_buf_is_valid(bufnr)
 end
 
+local function set_keymaps()
+	vim.api.nvim_buf_set_keymap(
+		state.chat_buf,
+		"n",
+		"<CR>",
+		":lua require('ai_chat.chat_manager').send_message()<CR>",
+		{
+			noremap = true,
+			silent = true,
+		}
+	)
+
+	vim.api.nvim_buf_set_keymap(state.chat_buf, "n", "q", '<cmd>lua require("ai_chat.ui").close_chat()<CR>', {
+		noremap = true,
+		silent = true,
+	})
+end
+
 function M.create_chat_window()
 	if state.chat_win and vim.api.nvim_win_is_valid(state.chat_win) then
 		vim.api.nvim_set_current_win(state.chat_win)
@@ -45,21 +63,7 @@ function M.create_chat_window()
 	vim.wo[state.chat_win].relativenumber = false
 
 	-- Key mappings
-	vim.api.nvim_buf_set_keymap(
-		state.chat_buf,
-		"n",
-		"<CR>",
-		":lua require('ai_chat.chat_manager').send_message()<CR>",
-		{
-			noremap = true,
-			silent = true,
-		}
-	)
-
-	vim.api.nvim_buf_set_keymap(state.chat_buf, "n", "q", '<cmd>lua require("ai_chat.ui").close_chat()<CR>', {
-		noremap = true,
-		silent = true,
-	})
+	set_keymaps()
 
 	vim.api.nvim_command("startinsert")
 	return state.chat_buf, state.chat_win
