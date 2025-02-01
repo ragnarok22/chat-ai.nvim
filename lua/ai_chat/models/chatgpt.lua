@@ -1,6 +1,7 @@
 local M = {}
 local config = require("ai_chat.config")
 
+-- @param messages: array of strings
 function M.query_sync(messages)
 	local api_key = config.user_config.models.chatgpt.api_key
 	local endpoint = config.user_config.models.chatgpt.endpoint
@@ -30,6 +31,8 @@ function M.query_sync(messages)
 	return vim.fn.json_decode(response)
 end
 
+-- @param messages: array of strings
+-- @callback: function(err, response)
 function M.query_async(messages, callback)
 	local uv = vim.loop
 	local api_key = config.user_config.models.chatgpt.api_key

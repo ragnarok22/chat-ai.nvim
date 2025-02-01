@@ -19,6 +19,7 @@ function M.create_chat_window()
 	-- Create a new buffer if it doesn't exist
 	if not is_valid(state.chat_buf) then
 		state.chat_buf = vim.api.nvim_create_buf(false, true)
+		vim.api.nvim_buf_set_lines(state.chat_buf, 0, -1, false, { "## Question:", "" })
 
 		vim.api.nvim_set_option_value("filetype", "markdown", { buf = state.chat_buf })
 		vim.api.nvim_set_option_value("buftype", "nofile", { buf = state.chat_buf })

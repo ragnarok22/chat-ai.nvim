@@ -58,7 +58,6 @@ function M.send_message()
 	end)
 
 	-- Add new question and answer
-	local time = os.date("%H:%M")
 	vim.list_extend(full_history, new_lines)
 	table.insert(full_history, "")
 
