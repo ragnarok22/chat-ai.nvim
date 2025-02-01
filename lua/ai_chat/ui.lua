@@ -20,8 +20,8 @@ function M.create_chat_window()
 	if not is_valid(state.chat_buf) then
 		state.chat_buf = vim.api.nvim_create_buf(false, true)
 
-		vim.api.nvim_buf_set_option(state.chat_buf, "filetype", "markdown")
-		vim.api.nvim_buf_set_option(state.chat_buf, "buftype", "nofile")
+		vim.api.nvim_set_option_value("filetype", "markdown", { buf = state.chat_buf })
+		vim.api.nvim_set_option_value("buftype", "nofile", { buf = state.chat_buf })
 	end
 
 	local width = math.floor(vim.o.columns * config.user_config.window.width)
